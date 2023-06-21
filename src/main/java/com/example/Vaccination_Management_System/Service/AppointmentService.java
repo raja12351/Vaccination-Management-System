@@ -10,6 +10,8 @@ import com.example.Vaccination_Management_System.Repository.AppointmentRepositor
 import com.example.Vaccination_Management_System.Repository.DoctorRepository;
 import com.example.Vaccination_Management_System.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,6 +27,9 @@ public class AppointmentService {
 
     @Autowired
     DoctorRepository doctorRepository;
+
+    @Autowired
+    JavaMailSender emailSender;
     public String bookAppointment(AppointmentDto appointmentDto) throws UserNotFound, DoctorNotFound {
         int userId = appointmentDto.getUserId();
         int docId = appointmentDto.getDocId();
@@ -54,6 +59,22 @@ public class AppointmentService {
 
         doctor.getAppointmentList().add(appointment);
         user.getAppointmentList().add(appointment);
+
+        //sending emails for appointments
+        String body = " Hi ! "+user.getName()+"\n" +
+                "You have successfully booked an appointment on "+appointment.getAppointmentDate() + "at "+appointment.getAppointmentTime()+"\n"+
+                "You doctor is "+doctor.getName()+ "\n"+
+                "Please reach at "+doctor.getVaccinationCenter().getAddress()+"\n"
+                + "Mask is mandatory";
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setFrom("springtesting17@gmail.com");
+        mailMessage.setTo(user.getEmailId());
+        mailMessage.setSubject("Appointment Confirmed!!");
+        mailMessage.setText(body);
+
+        emailSender.send(mailMessage);
 
         return "Appointment booked successfully with doctor " + doctor.getName();
     }

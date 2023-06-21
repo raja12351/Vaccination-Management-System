@@ -5,6 +5,7 @@ import com.example.Vaccination_Management_System.Service.VaccinationCenterServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ public class VaccinationCenterController {
     @Autowired
     VaccinationCenterService vaccinationCenterService;
 
+    @PostMapping("/addCenter")
     public ResponseEntity<String> addCenter(@RequestBody VaccinationCenter vaccinationCenter){
         try{
             return new ResponseEntity<>(vaccinationCenterService.addcenter(vaccinationCenter), HttpStatus.OK);

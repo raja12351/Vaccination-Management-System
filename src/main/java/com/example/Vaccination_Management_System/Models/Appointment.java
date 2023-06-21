@@ -18,7 +18,7 @@ public class Appointment {
 
     private Date appointmentDate; //YYYY-MM-DD
 
-    private LocalTime appointmentTime; //HH-MM-SS
+    private LocalTime appointmentTime; //HH:MM:SS
 
     @JsonIgnore
     @ManyToOne
